@@ -1,47 +1,39 @@
-# BetterUp Full Stack Engineer Interview Project
+# CalendarNshakya
 
-Thanks again for your interest in the position!  We are excited to dive into the fun part of the interview process!
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.2.
 
-Our goal is to focus conversations on real code instead of whiteboard logic puzzles.
+## Features
+This is an Angular application. It has the capability to select the desired Coaches and their respective availabilities in order to book a 30-minute time period with them.
+- Multi select Coaches to schedule an appointment (Use Ctrl+Click if Windows or CMD+Click if Mac to multi select)
+- Select date and time to book an appointment based on weekly view
+
+## How to use
+As soon as you get to the home page you are asked to select the Coaches. If you don't select any coach there will be no availability of coaches to display in the calendar view.
+After selecting the coaches, click on the `Date Select` to select the date and time to book an appointment. Click on any booking in the calendar to book an appointment. 
+
+## Libraries Used
+- `angular` for frontend library
+- `bootstrap` for frontend design
+- `angular-calendar` for calendar views
+- `date-fns` for date manipulation
+
+## Limitations
+- Color codes are not added to distinguish between different coaches in the calendar
+- Only weekly view is supported as of now
+
+## Development server
+
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Build
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 
-## Your mission...if you choose to accept it...
-Prototype a web application for scheduling an appointment.
 
-## Requirements
 
 ### Context
-Given a CSV dataset that contains the active coaches and their weekly schedule of their available hours: https://github.com/betterup/betterup-interview-fullstack/blob/main/data.csv
-
-### User Stories
-- As a Stakeholder, I want coach weekly schedules to be imported from a CSV file with the same format as [this one](https://github.com/betterup/betterup-interview-fullstack/blob/main/data.csv).
+Given a CSV dataset that contains the active coaches and their weekly schedule of their available hours, the project helps find the coaches availability and select one that fits the most.
+### User Stories That is Applicable using this Framework
 - As a User, I want to see which coaches I can schedule with.
 - As a User, I want to see what 30 minute timeslots are available to schedule with a particular coach.
 - As a User, I want to book an appointment with a coach at one of their available times.
-
-## Anti-Requirements
-Common questions or things that may get in the way.
-
-- **You can't do it all**. We respect your time, and expect that you will have to make choices and tradeoffs for what is in scope for your deliverable.
-- **Don’t worry about authentication**. Assume a non-authenticated experience to keep things simple.
-- **Pick your stack**. Choose any libraries that help you produce the highest quality work in the time available.
-
-## Evaluation Criteria
-**Our values infuse and guide the work we do**. They also provide a lens for evaluating this project. Some of the questions used when reviewing submissions include:
-
-- Is the codebase clear, concise, and understandable? *#craftsmanship*
-- Does the codebase follow best practices? *#craftsmanship*
-- Is the Information Architecture intuitive? *#playfulness*
-- Is the User eXperience fluid? *#playfulness*
-- Does the project feel alive and have a unique personality? *#zest*
-- Are there automated tests? *#craftsmanship*
-
-## Deliverables
-
-- Submit a pull request against this repository and be sure to include:
-  * Steps to setup and run the project locally.
-  * How long did the project take you?
-  * What tradeoffs/choices did you make?
-  * What went well?
-  * What could be improved in the project?
-- Submit a link to your PR to the project submission URL provided by BetterUp to trigger the review process. Feel free to send a note to lindsey.serrins@betterup.co and magali.crocchi@betterup.co to let them know that you are finished as well.

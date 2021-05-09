@@ -1,62 +1,46 @@
-*.rbc
-capybara-*.html
-.rspec
-/log
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
 /tmp
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/public/system
-/coverage/
-/spec/tmp
-*.orig
-rerun.txt
-pickle-email-*.html
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
 
-# TODO Comment out this rule if you are OK with secrets being uploaded to the repo
-config/initializers/secret_token.rb
-config/master.key
+# dependencies
+/node_modules
 
-# Only include if you have production secrets in this file, which is no longer a Rails default
-# config/secrets.yml
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
 
-# dotenv
-# TODO Comment out this rule if environment variables can be committed
-.env
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-## Environment normalization:
-/.bundle
-/vendor/bundle
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
 
-# these should all be checked in to normalize the environment:
-# Gemfile.lock, .ruby-version, .ruby-gemset
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
-.rvmrc
-
-# if using bower-rails ignore default bower_components path bower.json files
-/vendor/assets/bower_components
-*.bowerrc
-bower.json
-
-# Ignore pow environment settings
-.powenv
-
-# Ignore Byebug command history file.
-.byebug_history
-
-# Ignore node_modules
-node_modules/
-
-# Ignore precompiled javascript packs
-/public/packs
-/public/packs-test
-/public/assets
-
-# Ignore yarn files
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
-
-# Ignore uploaded files in development
-/storage/*
-!/storage/.keep
+# System Files
+.DS_Store
+Thumbs.db
