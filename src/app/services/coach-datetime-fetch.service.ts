@@ -15,6 +15,7 @@ export class CoachDateTimeFetchService {
   availabilities: Array<Availability> = [];   // stores the list of availablity after parsing the csv file
   uniqueCoaches = new Set();                  // stores the unique names of coaches  
   selectedCoaches: Array<string> = [];        // stores the selected names of coaches from the Coach Select page
+  fileSource: string = "assets/data.csv";
 
   constructor(private httpClient: HttpClient, private ngxCsvParser: NgxCsvParser) { 
     this.availabilities = new Array<Availability>();
@@ -71,7 +72,7 @@ export class CoachDateTimeFetchService {
    * Fetches the data from the local file. In case you want to move to online, jsut replace the src with the actual GET url
    ***/
   fetchData(): Observable<string> {
-   return this.httpClient.get("assets/data.csv", {responseType: 'text'})
+   return this.httpClient.get(this.fileSource, {responseType: 'text'})
     .pipe(
       map((file: string) => {
           return file;
