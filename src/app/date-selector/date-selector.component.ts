@@ -16,6 +16,8 @@ import {
   isSameMonth,
   addHours,
   addMinutes,
+  differenceInDays,
+  addWeeks,
 } from 'date-fns';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { NgbModal, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
@@ -216,13 +218,21 @@ export class DateSelectorComponent implements OnInit {
 
   setView(view: CalendarView) {
     this.view = view;
+    this.daysOffset = 0;
+    this.activeDayIsOpen = false;
+    this.addDaysOffset();
   }
 
   closeOpenMonthViewDay(right) {
     this.activeDayIsOpen = false;
-    
-    if(right) this.daysOffset += 7;
-    else this.daysOffset -= 7;
+    var offsetNumber = 7;
+    if(this.view == CalendarView.Week || this.view == CalendarView.Month) 
+      offsetNumber = 7;
+    else if(this.view = CalendarView.Day) 
+      offsetNumber = 1;
+     
+    if(right) this.daysOffset += offsetNumber;
+    else this.daysOffset -= offsetNumber;
 
     this.addDaysOffset();
   }
@@ -236,12 +246,65 @@ export class DateSelectorComponent implements OnInit {
     this.availabilities = [];
 
     avails.forEach(avail => {
-        this.addAvailabilityEvent(avail);
+        if(this.view == CalendarView.Week || this.view == CalendarView.Month)
+          this.addAvailabilityEvent(avail);
+        else if(this.view == CalendarView.Day)
+          this.addAvailabilityEventDaily(avail);
+
         // console.log("New Available Times: \n", availab, ", offset: ", this.daysOffset , " with selected Coach count: " + this.coachDateTimeFetchService.selectedCoaches.length);
         this.testEmitter$.next(this.availabilities); 
       });
     });
   }
+
+  /**
+   * For declaring add availability daily 
+   ***/
+  addAvailabilityEventDaily(avail: Availability) {
+    if(avail && avail.availableFrom) { 
+
+      // setting correct offset
+      let startDate = addWeeks(avail.availableFrom, Math.floor(this.daysOffset / 7));
+      let endDate = addWeeks(avail.availableTo, Math.floor(this.daysOffset / 7));
+
+      let refDate = new Date(); //addDays(new Date(), this.daysOffset);
+
+      let d = new Date(startDate.getTime());            // this is the base availabilty object to refer to the actual start date
+      let chunkedAvail = new Date(startDate.getTime()); // this is the moving availability object in the loop
+      let minutesToAdd = this.timeChunkInMinutes;       // since we are doing 30 minutes increment for each blocks
+      
+      //console.log("\nSTART: ", startDate, "\nREF: ", addDays(new Date(), this.daysOffset), "\nEND: ", endDate);
+
+      while(this.isTheSameDay(chunkedAvail, refDate) && this.isTheSameDay(endDate, refDate) && this.coachDateTimeFetchService.selectedCoaches.includes(avail.name)) {
+        let endingTime = addMinutes(d, minutesToAdd);
+
+        // create a new availabiliity object in order to avoid memory back referencing
+        let availab = new Availability();
+        availab.name = avail.name;
+        availab.availableFrom = new Date(chunkedAvail.getTime());
+        availab.availableTo = new Date(endingTime.getTime());
+
+        this.availabilities.push(availab);
+    // console.log("\nYAY :D ", availab);
+        // only add in the calendar if selected in the Coach Selector
+        if(this.coachDateTimeFetchService.selectedCoaches.includes(avail.name)) {
+          // console.log("Splitting time for  ", avail.name, " TO ", chunkedAvail, " and ENDING at ", endingTime, "\n main End time: ", avail.availableTo);
+          this.events.push({
+            start: addHours(chunkedAvail, 0), 
+            end: addHours(endingTime, 0),
+            title: avail.name,
+            color: colors.blue,
+            actions: this.actions,
+            draggable: false,
+          });
+        }
+
+        chunkedAvail = endingTime;
+        minutesToAdd += this.timeChunkInMinutes;
+      }
+    }
+  }
+
 
   /**
    * For each availability, divide it up into a blocks of 30 minutes event availability. So if you have 4 availability per day and each day is divided up into 5 of
@@ -284,9 +347,15 @@ export class DateSelectorComponent implements OnInit {
         chunkedAvail = endingTime;
         minutesToAdd += this.timeChunkInMinutes;
       }
-      // console.log("\n");
     }
   }
+
+  isTheSameDay(someDate, refDate) : boolean {
+    const today = addDays(refDate, this.daysOffset);
+    return someDate.getDate() == today.getDate() &&
+      someDate.getMonth() == today.getMonth() &&
+      someDate.getFullYear() == today.getFullYear()
+  };
 
   setVisibility(val: boolean) {
     this.isVisible = val;
