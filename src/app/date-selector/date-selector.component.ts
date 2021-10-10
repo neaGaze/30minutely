@@ -56,6 +56,7 @@ export class DateSelectorComponent implements OnInit {
   testEmitter$ = new BehaviorSubject<Array<Availability>>(this.availabilities);
   @Input() daysOffset = 0;
   @Input() isVisible: boolean = false;
+  timeChunkInMinutes: number = 30;
 
   constructor(private modal: NgbModal, private coachDateTimeFetchService: CoachDateTimeFetchService) {}
 
@@ -87,20 +88,12 @@ export class DateSelectorComponent implements OnInit {
   // Came with library. Didn't have to use it 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
+      label: '',
+      a11yLabel: 'Select',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event, null);
+        this.handleEvent('Selected', event, null);
       },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event, null);
-      },
-    },
+    }
   ];
 
   refresh: Subject<any> = new Subject();
@@ -197,7 +190,7 @@ export class DateSelectorComponent implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
     console.log("day: ", day);
     // Voila! You've booked the appointment
-    alert("Booked a meeting with " + event.title + " at " + event.start + " for 30 minutes " + action);
+    alert("Booked a meeting with " + event.title + " at " + event.start + " for " + this.timeChunkInMinutes + " minutes " + action);
   }
 
   addEvent(): void {
@@ -262,7 +255,7 @@ export class DateSelectorComponent implements OnInit {
 
       let d = new Date(startDate.getTime());            // this is the base availabilty object to refer to the actual start date
       let chunkedAvail = new Date(startDate.getTime()); // this is the moving availability object in the loop
-      let minutesToAdd = 30;                            // since we are doing 30 minutes increment for each blocks
+      let minutesToAdd = this.timeChunkInMinutes;       // since we are doing 30 minutes increment for each blocks
 
       while(chunkedAvail.getTime() < endDate.getTime()) {
         let endingTime = addMinutes(d, minutesToAdd);
@@ -289,7 +282,7 @@ export class DateSelectorComponent implements OnInit {
         }
 
         chunkedAvail = endingTime;
-        minutesToAdd += 30;
+        minutesToAdd += this.timeChunkInMinutes;
       }
       // console.log("\n");
     }
